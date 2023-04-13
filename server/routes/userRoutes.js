@@ -12,6 +12,6 @@ router.get("/:id/friends", verifyToken, getUserFriends);
 router.patch("/:id/:friendId", verifyToken, addRemoveFriend);
 
 // Debuger
-router.get("/", verifyToken, getAllUser);
+router.get("/", getAllUser);
 
 module.exports = router;
