@@ -9,10 +9,14 @@ const morgan = require("morgan");
 const path = require("path");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
-const postRoutes = require("./routes/postRoutes")
+const postRoutes = require("./routes/postRoutes");
 const { register } = require("./controllers/auth");
 const { createPost } = require("./controllers/postController");
 const { verifyToken } = require("./middleware/authMiddleware");
+const User = require("./models/User");
+const Post = require("./models/Post");
+const { users, posts } = require("./data");
+
 const app = express();
 dotenv.config();
 // MIDLEWARE
@@ -44,7 +48,7 @@ app.post("/post", verifyToken, upload.single("picture"), createPost);
 // ROUTES
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
-app.use("/post", postRoutes)
+app.use("/post", postRoutes);
 
 // DATA BASE CONNECT
 mongoose
@@ -53,6 +57,8 @@ mongoose
   .then(() => {
     app.listen(process.env.PORT, () => {
       console.log(`Example app listening on port ${process.env.PORT}`);
+      User.insertMany(users);
+      Post.insertMany(posts);
     });
   })
   .catch((err) => {
